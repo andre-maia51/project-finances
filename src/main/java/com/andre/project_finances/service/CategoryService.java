@@ -6,6 +6,8 @@ import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
@@ -22,5 +24,9 @@ public class CategoryService {
 
     public void saveCategory(Category category) {
         this.categoryRepository.save(category);
+    }
+
+    public Optional<Category> findCategory(Long id) {
+        return this.categoryRepository.findById(id);
     }
 }

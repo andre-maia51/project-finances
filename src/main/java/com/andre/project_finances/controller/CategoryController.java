@@ -4,7 +4,6 @@ import com.andre.project_finances.domain.dto.CategoryDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.service.CategoryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;

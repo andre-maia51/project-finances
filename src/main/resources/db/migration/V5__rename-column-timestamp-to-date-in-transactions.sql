@@ -1,0 +1,1 @@
+ALTER TABLE transactions RENAME COLUMN time_stamp TO date;

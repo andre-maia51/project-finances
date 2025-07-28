@@ -6,6 +6,8 @@ import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
@@ -22,5 +24,9 @@ public class AccountService {
 
     public void saveAccount(Account account) {
         this.accountRepository.save(account);
+    }
+
+    public Optional<Account> findAccount(Long id) {
+        return this.accountRepository.findById(id);
     }
 }
