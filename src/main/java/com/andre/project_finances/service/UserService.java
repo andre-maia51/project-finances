@@ -1,7 +1,7 @@
 package com.andre.project_finances.service;
 
 import com.andre.project_finances.domain.dto.UserDTO;
-import com.andre.project_finances.domain.dto.UserResposeDTO;
+import com.andre.project_finances.domain.dto.UserResponseDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,12 +20,12 @@ public class UserService implements UserDetailsService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserResposeDTO createUser(UserDTO userDTO) {
+    public UserResponseDTO createUser(UserDTO userDTO) {
         String password = this.passwordEncoder.encode(userDTO.password());
         User user = new User(userDTO, password);
         this.saveUser(user);
 
-        return new UserResposeDTO(
+        return new UserResponseDTO(
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail());
