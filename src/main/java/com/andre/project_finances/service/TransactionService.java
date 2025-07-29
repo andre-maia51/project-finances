@@ -7,6 +7,9 @@ import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.Transaction;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.domain.enums.TransactionType;
+import com.andre.project_finances.infra.excepctions.InsufficientBalanceException;
+import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
+import com.andre.project_finances.infra.excepctions.UnauthorizedOperationException;
 import com.andre.project_finances.repository.TransactionRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -30,14 +33,7 @@ public class TransactionService {
         Account account = this.getAccount(transactionDTO.account());
         this.verifyUser(account, category, user);
 
-        if(transactionDTO.type() == TransactionType.INCOME) {
-            account.setInitialBalance(account.getInitialBalance().add(transactionDTO.amount()));
-        }
-
-        if(transactionDTO.type() == TransactionType.EXPENSE) {
-            account.setInitialBalance(account.getInitialBalance().subtract(transactionDTO.amount()));
-        }
-
+        this.makeTransaction(transactionDTO, account);
         Transaction transaction = new Transaction(transactionDTO, account, category);
 
         this.transactionRepository.save(transaction);
@@ -51,23 +47,37 @@ public class TransactionService {
                 category.getName());
     }
 
+    public void makeTransaction(TransactionDTO transactionDTO, Account account) {
+        if(transactionDTO.type() == TransactionType.INCOME) {
+            account.setInitialBalance(account.getInitialBalance().add(transactionDTO.amount()));
+        }
+
+        if(transactionDTO.type() == TransactionType.EXPENSE) {
+            if(account.getInitialBalance().compareTo(transactionDTO.amount()) < 0) {
+                throw new InsufficientBalanceException("Saldo Insuficiente");
+            } else {
+                account.setInitialBalance(account.getInitialBalance().subtract(transactionDTO.amount()));
+            }
+        }
+    }
+
     public Category getCategory(Long id) {
         return this.categoryService.findCategory(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoria não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada!"));
     }
 
     public Account getAccount(Long id) {
         return this.accountService.findAccount(id)
-                .orElseThrow(() -> new EntityNotFoundException("Conta não encontrada"));
+                .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
     }
 
     public void verifyUser(Account account, Category category, User user) {
         if(!account.getUser().equals(user)) {
-            throw new SecurityException("A conta informada não pertence ao usuário autenticado");
+            throw new UnauthorizedOperationException("A conta informada não pertence ao usuário autenticado");
         }
 
         if(!category.getUser().equals(user)) {
-            throw new SecurityException("A categoria informada não pertence ao usuário autenticado");
+            throw new UnauthorizedOperationException("A categoria informada não pertence ao usuário autenticado");
         }
     }
 
