@@ -7,6 +7,6 @@ RUN mvn clean package -DskipTests
 
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
-COPY --from=builder /app/target/project-finances-0.0.1-SNAPSHOT.jar .
+COPY --from=builder /app/target/project-finances-0.1.0.jar .
 EXPOSE 8080
-CMD ["java", "-jar", "project-finances-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "project-finances-0.1.0.jar"]
