@@ -11,7 +11,6 @@ import com.andre.project_finances.infra.excepctions.InsufficientBalanceException
 import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.infra.excepctions.UnauthorizedOperationException;
 import com.andre.project_finances.repository.TransactionRepository;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
