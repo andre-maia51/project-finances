@@ -1,7 +1,7 @@
 package com.andre.project_finances.controller;
 
-import com.andre.project_finances.domain.dto.UserDTO;
-import com.andre.project_finances.domain.dto.UserResponseDTO;
+import com.andre.project_finances.dto.UserDTO;
+import com.andre.project_finances.dto.UserResponseDTO;
 import com.andre.project_finances.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +21,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserResponseDTO userResposeDTO = this.userService.createUser(userDTO);
-        return new ResponseEntity<>(userResposeDTO, HttpStatus.CREATED);
+        UserResponseDTO userResponseDTO = this.userService.createUser(userDTO);
+        return new ResponseEntity<>(userResponseDTO, HttpStatus.CREATED);
     }
 }

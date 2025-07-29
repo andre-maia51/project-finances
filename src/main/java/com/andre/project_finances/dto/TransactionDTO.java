@@ -1,16 +1,15 @@
-package com.andre.project_finances.domain.dto;
+package com.andre.project_finances.dto;
 
 import com.andre.project_finances.domain.enums.TransactionType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public record TransactionResponseDTO(
+public record TransactionDTO(
         String description,
         BigDecimal amount,
-        LocalDateTime date,
         TransactionType type,
-        String accountName,
-        String categoryName
+        Long account,
+        Long category
 ) {
 }

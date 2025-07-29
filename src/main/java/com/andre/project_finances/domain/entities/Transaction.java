@@ -1,6 +1,6 @@
 package com.andre.project_finances.domain.entities;
 
-import com.andre.project_finances.domain.dto.TransactionDTO;
+import com.andre.project_finances.dto.TransactionDTO;
 import com.andre.project_finances.domain.enums.TransactionType;
 import jakarta.persistence.*;
 import lombok.*;

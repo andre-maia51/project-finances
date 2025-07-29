@@ -1,11 +1,10 @@
 package com.andre.project_finances.controller;
 
-import com.andre.project_finances.domain.dto.LoginDTO;
+import com.andre.project_finances.dto.LoginDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.infra.security.TokenDataDTO;
 import com.andre.project_finances.infra.security.TokenService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,4 +1,4 @@
-package com.andre.project_finances.domain.dto;
+package com.andre.project_finances.dto;
 
 public record LoginDTO(
         String email,

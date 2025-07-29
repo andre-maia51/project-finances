@@ -1,7 +1,7 @@
 package com.andre.project_finances.service;
 
-import com.andre.project_finances.domain.dto.UserDTO;
-import com.andre.project_finances.domain.dto.UserResponseDTO;
+import com.andre.project_finances.dto.UserDTO;
+import com.andre.project_finances.dto.UserResponseDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,7 +1,7 @@
 package com.andre.project_finances.controller;
 
-import com.andre.project_finances.domain.dto.TransactionDTO;
-import com.andre.project_finances.domain.dto.TransactionResponseDTO;
+import com.andre.project_finances.dto.TransactionDTO;
+import com.andre.project_finances.dto.TransactionResponseDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.service.TransactionService;
 import org.springframework.http.HttpStatus;

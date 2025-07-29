@@ -1,6 +1,5 @@
 package com.andre.project_finances.domain.entities;
 
-import com.andre.project_finances.domain.dto.AccountDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

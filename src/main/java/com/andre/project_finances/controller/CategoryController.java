@@ -1,6 +1,6 @@
 package com.andre.project_finances.controller;
 
-import com.andre.project_finances.domain.dto.CategoryDTO;
+import com.andre.project_finances.dto.CategoryDTO;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.service.CategoryService;
 import org.springframework.http.HttpStatus;

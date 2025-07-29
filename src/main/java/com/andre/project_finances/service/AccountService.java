@@ -1,6 +1,6 @@
 package com.andre.project_finances.service;
 
-import com.andre.project_finances.domain.dto.AccountDTO;
+import com.andre.project_finances.dto.AccountDTO;
 import com.andre.project_finances.domain.entities.Account;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.AccountRepository;

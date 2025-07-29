@@ -1,13 +1,12 @@
 package com.andre.project_finances.domain.entities;
 
-import com.andre.project_finances.domain.dto.UserDTO;
+import com.andre.project_finances.dto.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 
 @Entity(name = "users")
 @Table(name = "users")

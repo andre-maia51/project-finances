@@ -1,7 +1,7 @@
 package com.andre.project_finances.service;
 
-import com.andre.project_finances.domain.dto.TransactionDTO;
-import com.andre.project_finances.domain.dto.TransactionResponseDTO;
+import com.andre.project_finances.dto.TransactionDTO;
+import com.andre.project_finances.dto.TransactionResponseDTO;
 import com.andre.project_finances.domain.entities.Account;
 import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.Transaction;
