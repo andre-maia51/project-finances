@@ -6,7 +6,9 @@ import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -28,5 +30,12 @@ public class AccountService {
 
     public Optional<Account> findAccount(Long id) {
         return this.accountRepository.findById(id);
+    }
+
+    public List<AccountDTO> getAccountsByUser(User user) {
+        return this.accountRepository.findAccountByUser(user)
+                .stream()
+                .map(account -> new AccountDTO(account.getName(), account.getInitialBalance()))
+                .toList();
     }
 }

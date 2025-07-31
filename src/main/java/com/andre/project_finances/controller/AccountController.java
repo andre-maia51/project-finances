@@ -6,10 +6,9 @@ import com.andre.project_finances.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/accounts")
@@ -25,5 +24,12 @@ public class AccountController {
         User owner = (User) auth.getPrincipal();
         AccountDTO response = this.accountService.createAccount(accountDTO, owner);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AccountDTO>> getAccountsByUser(Authentication auth) {
+        User owner = (User) auth.getPrincipal();
+        List<AccountDTO> response = this.accountService.getAccountsByUser(owner);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
