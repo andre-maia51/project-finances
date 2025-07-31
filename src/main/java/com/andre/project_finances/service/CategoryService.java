@@ -6,6 +6,7 @@ import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +29,12 @@ public class CategoryService {
 
     public Optional<Category> findCategory(Long id) {
         return this.categoryRepository.findById(id);
+    }
+
+    public List<CategoryDTO> getCategoriesByUser(User user) {
+        return this.categoryRepository.findCategoriesByUser(user)
+                .stream()
+                .map(category -> new CategoryDTO(category.name(), category.description()))
+                .toList();
     }
 }
