@@ -5,6 +5,7 @@ import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.CategoryRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,8 +41,21 @@ public class CategoryService {
     }
 
     public CategoryDTO getCategoryByUserId(Long id) {
-        Category category = this.categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+        Category category = this.getCategoryFromRepository(id);
         return new CategoryDTO(category.getName(), category.getDescription());
+    }
+
+    @Transactional
+    public CategoryDTO changeCategory(Long id, CategoryDTO categoryDTO) {
+        Category category = this.getCategoryFromRepository(id);
+        category.setName(categoryDTO.name());
+        category.setDescription(categoryDTO.description());
+        this.categoryRepository.save(category);
+        return new CategoryDTO(category.getName(), category.getDescription());
+    }
+
+    public Category getCategoryFromRepository(Long id) {
+        return this.categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
     }
 }
