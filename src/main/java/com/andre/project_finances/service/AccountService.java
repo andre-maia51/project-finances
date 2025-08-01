@@ -3,8 +3,10 @@ package com.andre.project_finances.service;
 import com.andre.project_finances.dto.AccountDTO;
 import com.andre.project_finances.domain.entities.Account;
 import com.andre.project_finances.domain.entities.User;
+import com.andre.project_finances.infra.excepctions.BusinessRuleConflict;
 import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.AccountRepository;
+import com.andre.project_finances.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class AccountService {
     private final AccountRepository accountRepository;
+    private final TransactionRepository transactionRepository;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, TransactionRepository transactionRepository) {
         this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public AccountDTO createAccount(AccountDTO accountDTO, User user) {
@@ -57,5 +61,15 @@ public class AccountService {
     public Account getAccountFromRepository(Long id) {
         return this.accountRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
+    }
+
+    @Transactional
+    public void deleteAccount(Long id) {
+        Account account = this.getAccountFromRepository(id);
+        if(this.transactionRepository.existsByAccount(account)) {
+            throw new BusinessRuleConflict("Não é possível apagar uma conta com transações associadas");
+        } else {
+            this.accountRepository.delete(account);
+        }
     }
 }

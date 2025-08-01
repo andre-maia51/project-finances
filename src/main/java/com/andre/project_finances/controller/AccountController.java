@@ -44,4 +44,10 @@ public class AccountController {
         AccountDTO response = this.accountService.changeAccountName(id, accountDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+        this.accountService.deleteAccount(id);
+        return ResponseEntity.noContent().build();
+    }
 }

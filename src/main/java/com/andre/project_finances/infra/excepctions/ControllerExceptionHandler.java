@@ -41,6 +41,12 @@ public class ControllerExceptionHandler {
         return ResponseEntity.badRequest().body(exceptionDTO);
     }
 
+    @ExceptionHandler(BusinessRuleConflict.class)
+    public ResponseEntity<ExceptionDTO> threatConflict(BusinessRuleConflict exception) {
+        ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), HttpStatus.CONFLICT);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exceptionDTO);
+    }
+
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionDTO> threatUsernameNotFound(UsernameNotFoundException exception) {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), HttpStatus.UNAUTHORIZED);
@@ -52,5 +58,4 @@ public class ControllerExceptionHandler {
         ExceptionDTO exceptionDTO = new ExceptionDTO(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         return ResponseEntity.internalServerError().body(exceptionDTO);
     }
-
 }

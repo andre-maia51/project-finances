@@ -3,8 +3,10 @@ package com.andre.project_finances.service;
 import com.andre.project_finances.dto.CategoryDTO;
 import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.User;
+import com.andre.project_finances.infra.excepctions.BusinessRuleConflict;
 import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.CategoryRepository;
+import com.andre.project_finances.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +16,11 @@ import java.util.Optional;
 @Service
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final TransactionRepository transactionRepository;
 
-    public CategoryService(CategoryRepository categoryRepository) {
+    public CategoryService(CategoryRepository categoryRepository, TransactionRepository transactionRepository) {
         this.categoryRepository = categoryRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public CategoryDTO createCategory(CategoryDTO categoryDTO, User user) {
@@ -57,5 +61,15 @@ public class CategoryService {
     public Category getCategoryFromRepository(Long id) {
         return this.categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+    }
+
+    @Transactional
+    public void deleteCategory(Long id) {
+        Category category = this.getCategoryFromRepository(id);
+        if(this.transactionRepository.existsByCategory(category)) {
+            throw new BusinessRuleConflict("Não é possível apagar uma categoria com transações associadas");
+        } else {
+            this.categoryRepository.delete(category);
+        }
     }
 }

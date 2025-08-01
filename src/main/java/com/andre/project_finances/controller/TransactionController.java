@@ -43,4 +43,10 @@ public class TransactionController {
         TransactionResponseDTO response = this.transactionService.changeTransaction(id, transactionDTO);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
+        this.transactionService.deleteTransaction(id);
+        return ResponseEntity.noContent().build();
+    }
 }

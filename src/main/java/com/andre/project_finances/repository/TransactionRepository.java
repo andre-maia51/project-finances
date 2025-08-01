@@ -1,5 +1,7 @@
 package com.andre.project_finances.repository;
 
+import com.andre.project_finances.domain.entities.Account;
+import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.Transaction;
 import com.andre.project_finances.domain.entities.User;
 import org.springframework.data.domain.Sort;
@@ -22,4 +24,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     );
 
     List<Transaction> findTransactionsByAccountUser(User user);
+
+    Boolean existsByAccount(Account account);
+
+    Boolean existsByCategory(Category category);
 }

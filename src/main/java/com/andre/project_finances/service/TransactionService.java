@@ -75,13 +75,7 @@ public class TransactionService {
         Transaction transaction = this.getTransaction(id);
         Account oldAccount = transaction.getAccount();
 
-        if(transaction.getType() == TransactionType.INCOME) {
-            oldAccount.setInitialBalance(oldAccount.getInitialBalance().subtract(transaction.getAmount()));
-        }
-
-        if(transaction.getType() == TransactionType.EXPENSE) {
-            oldAccount.setInitialBalance(oldAccount.getInitialBalance().add(transaction.getAmount()));
-        }
+        this.restoreAccountBalance(transaction, oldAccount);
 
         Account newAccount = this.getAccount(transactionDTO.account());
         Category newCategory = this.getCategory(transactionDTO.category());
@@ -106,6 +100,16 @@ public class TransactionService {
         );
     }
 
+    @Transactional
+    public void deleteTransaction(Long id) {
+        Transaction transaction = this.getTransaction(id);
+        Account account = transaction.getAccount();
+
+        this.restoreAccountBalance(transaction, account);
+
+        this.transactionRepository.delete(transaction);
+    }
+
     public void makeTransaction(TransactionDTO transactionDTO, Account account) {
         if(transactionDTO.type() == TransactionType.INCOME) {
             account.setInitialBalance(account.getInitialBalance().add(transactionDTO.amount()));
@@ -117,6 +121,16 @@ public class TransactionService {
             } else {
                 account.setInitialBalance(account.getInitialBalance().subtract(transactionDTO.amount()));
             }
+        }
+    }
+
+    public void restoreAccountBalance(Transaction transaction, Account account) {
+        if(transaction.getType() == TransactionType.INCOME) {
+            account.setInitialBalance(account.getInitialBalance().subtract(transaction.getAmount()));
+        }
+
+        if(transaction.getType() == TransactionType.EXPENSE) {
+            account.setInitialBalance(account.getInitialBalance().add(transaction.getAmount()));
         }
     }
 
@@ -152,6 +166,4 @@ public class TransactionService {
     public List<Transaction> getAllTransactionsByYearAndMonth(User user, Integer year, Integer month) {
         return this.transactionRepository.findAllByUserAndMonthAndYear(user, year, month);
     }
-
-
 }
