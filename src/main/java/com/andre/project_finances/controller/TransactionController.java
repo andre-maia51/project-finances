@@ -37,4 +37,10 @@ public class TransactionController {
         List<TransactionResponseDTO> response = this.transactionService.listTransactions(owner, year, month);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TransactionResponseDTO> changeTransaction(@PathVariable Long id, @RequestBody TransactionDTO transactionDTO) {
+        TransactionResponseDTO response = this.transactionService.changeTransaction(id, transactionDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

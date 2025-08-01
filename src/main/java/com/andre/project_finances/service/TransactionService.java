@@ -70,6 +70,42 @@ public class TransactionService {
 
     }
 
+    @Transactional
+    public TransactionResponseDTO changeTransaction(Long id, TransactionDTO transactionDTO) {
+        Transaction transaction = this.getTransaction(id);
+        Account oldAccount = transaction.getAccount();
+
+        if(transaction.getType() == TransactionType.INCOME) {
+            oldAccount.setInitialBalance(oldAccount.getInitialBalance().subtract(transaction.getAmount()));
+        }
+
+        if(transaction.getType() == TransactionType.EXPENSE) {
+            oldAccount.setInitialBalance(oldAccount.getInitialBalance().add(transaction.getAmount()));
+        }
+
+        Account newAccount = this.getAccount(transactionDTO.account());
+        Category newCategory = this.getCategory(transactionDTO.category());
+
+        this.makeTransaction(transactionDTO, newAccount);
+
+        transaction.setDescription(transactionDTO.description());
+        transaction.setAmount(transactionDTO.amount());
+        transaction.setType(transactionDTO.type());
+        transaction.setAccount(newAccount);
+        transaction.setCategory(newCategory);
+
+        this.transactionRepository.save(transaction);
+
+        return new TransactionResponseDTO(
+                transaction.getDescription(),
+                transaction.getAmount(),
+                transaction.getDate(),
+                transaction.getType(),
+                transaction.getAccount().getName(),
+                transaction.getCategory().getName()
+        );
+    }
+
     public void makeTransaction(TransactionDTO transactionDTO, Account account) {
         if(transactionDTO.type() == TransactionType.INCOME) {
             account.setInitialBalance(account.getInitialBalance().add(transactionDTO.amount()));
@@ -92,6 +128,11 @@ public class TransactionService {
     public Account getAccount(Long id) {
         return this.accountService.findAccount(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
+    }
+
+    public Transaction getTransaction(Long id) {
+        return this.transactionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Transação não encontrada"));
     }
 
     public void verifyUser(Account account, Category category, User user) {
