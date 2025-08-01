@@ -38,4 +38,10 @@ public class AccountController {
         AccountDTO response = this.accountService.getAccountByUserId(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<AccountDTO> changeAccountName(@PathVariable Long id, @RequestBody AccountDTO accountDTO) {
+        AccountDTO response = this.accountService.changeAccountName(id, accountDTO);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

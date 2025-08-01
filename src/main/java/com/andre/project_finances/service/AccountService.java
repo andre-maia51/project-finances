@@ -5,6 +5,7 @@ import com.andre.project_finances.domain.entities.Account;
 import com.andre.project_finances.domain.entities.User;
 import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.AccountRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,8 +42,20 @@ public class AccountService {
     }
 
     public AccountDTO getAccountByUserId(Long id) {
-        Account account = this.accountRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
+        Account account = this.getAccountFromRepository(id);
         return new AccountDTO(account.getName(), account.getInitialBalance());
+    }
+
+    @Transactional
+    public AccountDTO changeAccountName(Long id, AccountDTO accountDTO) {
+        Account account = this.getAccountFromRepository(id);
+        account.setName(accountDTO.name());
+        this.accountRepository.save(account);
+        return new AccountDTO(account.getName(), account.getInitialBalance());
+    }
+
+    public Account getAccountFromRepository(Long id) {
+        return this.accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
     }
 }
