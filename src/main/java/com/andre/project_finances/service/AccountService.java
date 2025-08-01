@@ -3,6 +3,7 @@ package com.andre.project_finances.service;
 import com.andre.project_finances.dto.AccountDTO;
 import com.andre.project_finances.domain.entities.Account;
 import com.andre.project_finances.domain.entities.User;
+import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,11 @@ public class AccountService {
                 .stream()
                 .map(account -> new AccountDTO(account.getName(), account.getInitialBalance()))
                 .toList();
+    }
+
+    public AccountDTO getAccountByUserId(Long id) {
+        Account account = this.accountRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Conta não encontrada"));
+        return new AccountDTO(account.getName(), account.getInitialBalance());
     }
 }

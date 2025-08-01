@@ -32,4 +32,10 @@ public class AccountController {
         List<AccountDTO> response = this.accountService.getAccountsByUser(owner);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountDTO> getAccountByUserId(@PathVariable Long id) {
+        AccountDTO response = this.accountService.getAccountByUserId(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

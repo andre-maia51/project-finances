@@ -14,6 +14,8 @@ import com.andre.project_finances.repository.TransactionRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransactionService {
     private final AccountService accountService;
@@ -44,6 +46,28 @@ public class TransactionService {
                 transaction.getType(),
                 account.getName(),
                 category.getName());
+    }
+
+    public List<TransactionResponseDTO> listTransactions(User user, Integer year, Integer month) {
+        List<Transaction> transactions;
+
+        if(year != null && month != null) {
+            transactions = this.getAllTransactionsByYearAndMonth(user, year, month);
+        } else {
+            transactions = this.getAllTransactions(user);
+        }
+
+        return transactions.stream()
+                .map(transaction -> new TransactionResponseDTO(
+                        transaction.getDescription(),
+                        transaction.getAmount(),
+                        transaction.getDate(),
+                        transaction.getType(),
+                        transaction.getAccount().getName(),
+                        transaction.getCategory().getName()
+                ))
+                .toList();
+
     }
 
     public void makeTransaction(TransactionDTO transactionDTO, Account account) {
@@ -78,6 +102,14 @@ public class TransactionService {
         if(!category.getUser().equals(user)) {
             throw new UnauthorizedOperationException("A categoria informada não pertence ao usuário autenticado");
         }
+    }
+
+    public List<Transaction> getAllTransactions(User user) {
+        return this.transactionRepository.findTransactionsByAccountUser(user);
+    }
+
+    public List<Transaction> getAllTransactionsByYearAndMonth(User user, Integer year, Integer month) {
+        return this.transactionRepository.findAllByUserAndMonthAndYear(user, year, month);
     }
 
 

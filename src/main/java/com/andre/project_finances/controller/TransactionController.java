@@ -7,10 +7,9 @@ import com.andre.project_finances.service.TransactionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/transactions")
@@ -26,5 +25,16 @@ public class TransactionController {
         User owner = (User) auth.getPrincipal();
         TransactionResponseDTO response = this.transactionService.createTransaction(transactionDTO, owner);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TransactionResponseDTO>> getTransactions(
+            @RequestParam(required = false) Integer year,
+            @RequestParam(required = false) Integer month,
+            Authentication auth
+    ) {
+        User owner = (User) auth.getPrincipal();
+        List<TransactionResponseDTO> response = this.transactionService.listTransactions(owner, year, month);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

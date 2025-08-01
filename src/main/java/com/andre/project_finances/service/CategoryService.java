@@ -3,6 +3,7 @@ package com.andre.project_finances.service;
 import com.andre.project_finances.dto.CategoryDTO;
 import com.andre.project_finances.domain.entities.Category;
 import com.andre.project_finances.domain.entities.User;
+import com.andre.project_finances.infra.excepctions.ResourceNotFoundException;
 import com.andre.project_finances.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +37,11 @@ public class CategoryService {
                 .stream()
                 .map(category -> new CategoryDTO(category.name(), category.description()))
                 .toList();
+    }
+
+    public CategoryDTO getCategoryByUserId(Long id) {
+        Category category = this.categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada"));
+        return new CategoryDTO(category.getName(), category.getDescription());
     }
 }

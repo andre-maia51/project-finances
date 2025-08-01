@@ -32,4 +32,10 @@ public class CategoryController {
         List<CategoryDTO> response = this.categoryService.getCategoriesByUser(owner);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+        CategoryDTO response = this.categoryService.getCategoryByUserId(id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
